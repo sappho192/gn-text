@@ -71,8 +71,9 @@ jobs:
           $nuspec = $nuspec -replace '\$version\$', $version
           Set-Content "chocolatey/gn-text.nuspec" $nuspec
 
-          # Update install script checksum
+          # Update install script version and checksum
           $install = Get-Content "chocolatey/tools/chocolateyinstall.ps1" -Raw
+          $install = $install -replace '\$version\$', $version
           $install = $install -replace '\$checksum64\$', $checksum
           Set-Content "chocolatey/tools/chocolateyinstall.ps1" $install
 
