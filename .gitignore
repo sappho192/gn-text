@@ -6,3 +6,5 @@ build/
 
 .goreleaser.yaml
 dist/
+
+gn-text
