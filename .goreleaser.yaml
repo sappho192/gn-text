@@ -1,0 +1,43 @@
+version: 2
+
+project_name: gn-text
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+
+brews:
+  - repository:
+      owner: sappho192
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    homepage: https://github.com/sappho192/gn-text
+    description: Terminal-based GeekNews reader for Korean tech news
+    license: MIT
+
+chocolateys:
+  - name: gn-text
+    owners: sappho192
+    authors: sappho192
+    project_url: https://github.com/sappho192/gn-text
+    license_url: https://github.com/sappho192/gn-text/blob/main/LICENSE
+    description: Terminal-based GeekNews reader for Korean tech news
+    tags: "geeknews terminal tui korean news"
+    api_key: "{{ .Env.CHOCOLATEY_API_KEY }}"

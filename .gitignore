@@ -4,7 +4,6 @@ hn-text
 bin/
 build/
 
-.goreleaser.yaml
 dist/
 
 gn-text
