@@ -2,27 +2,21 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/rivo/tview"
 )
 
-var hackerNewsURL = "https://news.ycombinator.com/"
+var geekNewsRSSURL = "https://news.hada.io/rss/news"
 
 func main() {
 	app := tview.NewApplication()
-	// TODO: rewrite this for other options
-	page := ""
-	if len(os.Args) > 1 && os.Args[1] == "best" {
-		page = "best"
-	}
 
-	htmlContent, err := fetchWebpage(hackerNewsURL + page)
+	rssContent, err := fetchWebpage(geekNewsRSSURL)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	articles, err := parseArticles(htmlContent)
+	articles, err := parseGeekNewsRSS(rssContent)
 	if err != nil {
 		log.Fatal(err)
 	}

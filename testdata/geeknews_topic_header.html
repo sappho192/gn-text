@@ -1,0 +1,59 @@
+<div class=topic-table>
+<div id='msg'></div><div class=topic><div class=vote><span id='vote26307'><a class=upvote href='javascript:vote(26307, "up");'><span>▲</span></a></span></div><div class='topictitle link'><a href='https://github.com/first-fluke/oh-my-ag' class='bold ud'><h1>Show GN: oh-my-ag: Antigravity를 위한 멀티 에이전트 오케스트레이터</h1></a> <span class=topicurl>(github.com/first-fluke)</span></div><div class=topicinfo><span id='tp26307'>30</span>P by <a href='/user?id=gracefullight'>gracefullight</a> <span title='2026-02-01 21:59'>2일전</span><span id='unvote26307'></span><span id='fav26307'> | <a href='javascript:fav(26307, "favorite")'>★ favorite</a></span> | <a href='topic?id=26307' onclick='scrollToComments(event)'>댓글 14개</a> </td></div><div class=topic_contents><div><span id='topic_contents'><p>최근 Claude의 2026 Agentic Coding Trends Report에서는<br />
+소프트웨어 개발은 더 이상 “코드를 직접 쓰는 일”이 아니라, 에이전트를 어떻게 조율하고 감독하느냐의 문제로 정의했습니다.</p>
+<p>AI는 좋은 협업자이지만, 품질과 보안을 담보하려면 인간의 감독과 검증이 필수입니다.<br />
+완전한 위임도 좋지만, 유지보수를 위해선 협업해야하는 구조라는 말이죠.<br />
+문제는 이 협업 구조를 매번 프롬프트로 수작업 구성하고 관리해야 한다는 점입니다.</p>
+<p><strong>[왜 oh-my-ag인가]</strong><br />
+Antigravity나 CLI 기반 에이전트를 실제 프로젝트에 써본 분들이라면, 아래 문제들이 낯설지 않을 겁니다.</p>
+<p>에이전트가 Skills를 제대로 읽지 않거나, Rules가 대화 중간에 무시되고,<br />
+응답이 통제되지 않은 채 무한 루프에 빠지거나, 열심히 일은 하는데 정작 요청한 일은 하지 않는 상황들입니다.</p>
+<p>모델 문제처럼 보이지만, 실제로는 오케스트레이션의 문제였습니다.<br />
+그래서 프롬프트를 계속 보정하는 대신 방향을 바꿨습니다.</p>
+<p>“프롬프트를 잘 쓰는 문제”가 아니라, “에이전트 협업 구조를 기본값으로 제공하면 되지 않을까?”<br />
+이 질문에서 oh-my-ag가 시작됐습니다.</p>
+<p>[oh-my-ag가 하는 일]<br />
+oh-my-ag는 Antigravity를 위한 역할 기반 에이전트 오케스트레이션 레이어입니다.<br />
+단일 에이전트에게 모든 맥락을 밀어 넣는 방식 대신, 책임을 명확히 분리합니다.</p>
+<p>오케스트레이터는 전체 흐름을 제어하고,<br />
+서브 에이전트는 각자의 역할에 집중하며,<br />
+필요한 맥락은 공용 메모리를 통해 공유됩니다.</p>
+<p>설치는 아래 한 줄이면 충분합니다.<br />
+<code>bunx oh-my-ag</code></p>
+<p>그러면 프로젝트에 역할 기반 에이전트 세트가 자동으로 구성됩니다.</p>
+<ul>
+<li>PM은 요구사항을 정리하고 작업을 분해합니다.</li>
+<li>Frontend와 Backend는 각자의 영역에서 구현을 담당합니다.</li>
+<li>Mobile은 Flutter 기반 모바일 구현을 맡고,</li>
+<li>QA는 요구사항 대비 검증과 엣지 케이스를 점검합니다.</li>
+<li>Debug 에이전트는 실패 원인을 분석하고 수정 방향을 제안합니다.</li>
+</ul>
+<p>각 에이전트는 역할에 맞게 최적화된 Skills와 프롬프트 구조를 갖고 있으며, 오케스트레이터가 이들을 하나의 흐름으로 묶습니다.</p>
+<p><strong>[왜 써야 하는가]</strong><br />
+첫째, 모델 성능 변동성을 프로세스로 완화하기 위함입니다.</p>
+<p>최근 Gemini 3 Pro처럼 모델 성능이 업데이트나 서버 상황에 따라 갑자기 달라지는 경우가 잦습니다.<br />
+단일 에이전트와 긴 프롬프트에 의존하는 구조는 이런 변동에 매우 취약합니다.<br />
+oh-my-ag는 역할을 쪼개고 책임을 분리해, 특정 모델의 일시적인 성능 하락이 전체 결과를 망치지 않도록 설계했습니다.</p>
+<p>오케스트레이터와 모든 서브 에이전트는 Serena Memory를 공용 메모리로 사용합니다.<br />
+결정 사항과 중간 결과가 메모리에 누적되기 때문에, 모델이 바뀌거나 응답 품질이 흔들려도 맥락이 쉽게 유실되지 않습니다.</p>
+<p>둘째, 인간의 감독 포인트가 명확해집니다.</p>
+<p>핵심은 인간을 루프에서 제거하는 게 아니라, 어디에 개입해야 하는지를 분명히 하는 것입니다.<br />
+PM, QA, Debug 역할이 분리되어 있기 때문에 어디까지 AI가 맡았는지, 어디서 사람이 판단해야 하는지가 구조적으로 드러납니다.</p>
+<p>셋째, 반복적인 프롬프트 관리 리소스를 줄일 수 있습니다.</p>
+<p>매번 같은 역할 설명과 규칙, 승인 과정을 프롬프트로 다시 입력하는 일은 생산적이지 않습니다.<br />
+oh-my-ag는 역할별 Skill 번들과 병렬 실행 가능한 오케스트레이터를 통해 프롬프트 설정과 연결 구조를 기본값으로 자동화합니다.</p>
+<p><strong>[주요 특징]</strong></p>
+<ul>
+<li>역할 기반 전문 에이전트 세트</li>
+<li>병렬 실행을 지원하는 오케스트레이션 레이어</li>
+<li>Gemini CLI / Claude CLI / Codex CLI 지원</li>
+<li>Serena Memory 연동</li>
+<li>MCP별 Tool Scope 제어</li>
+<li>Conventional Commits 자동화</li>
+</ul>
+<p>2026년의 AI-Native 개발은 더 이상 “도구를 잘 쓰는 법”의 문제가 아닙니다.<br />
+이 오케스트레이션은 first-fluke/fullstack-starter의 구조를 전제로 설계했고, 풀스택 웹/모바일 어플리케이션에서 하루 50커밋 이상을 잘 소화해내고 있습니다.</p>
+<p>이미 Antigravity를 사용하고 계신 분이라면, 프롬프트와 씨름하는 대신 oh-my-ag와 AI Pro로 같이 6개 계정의 토큰을 녹여보시지요.</p>
+<p><strong>GitHub link 🔗</strong><br />
+<a href="https://bit.ly/4kbPpQh">Github: first-fluke/oh-my-ag</a></p>
+</span></div></div></div>            

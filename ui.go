@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/url"
 	"os/exec"
 	"runtime"
-	"strconv"
 	"strings"
 
 	"github.com/gdamore/tcell/v2"
@@ -14,54 +11,42 @@ import (
 	"github.com/rivo/tview"
 )
 
-const fireEmojiNrOfComments = 50 // TODO maybe configurable
-
 func createArticleList(articles []Article) *tview.List {
 	list := tview.NewList().ShowSecondaryText(true).SetSecondaryTextColor(tcell.ColorGray)
 	for _, article := range articles {
-		title := article.Title
-		if article.Comments > fireEmojiNrOfComments {
-			title = "🔥 " + title
-		}
-
-		commentsText := strconv.Itoa(article.Comments) + " comments"
-		list.AddItem(title, extractDomain(article.Link)+" "+commentsText, 0, nil)
+		// Display title and domain only (no comment count from RSS)
+		list.AddItem(article.Title, article.Domain, 0, nil)
 	}
 
 	return list
 }
 
-func extractDomain(link string) string {
-	u, err := url.Parse(link)
+func fetchAndGenerateList() (*tview.List, []Article, error) {
+	rssContent, err := fetchWebpage(geekNewsRSSURL)
 	if err != nil {
-		log.Fatal(err)
-	}
-	return u.Host
-}
-
-func fetchAndGenerateList(hackerNewsURL string) (*tview.List, error) {
-	htmlContent, err := fetchWebpage(hackerNewsURL)
-	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	articles, err := parseArticles(htmlContent)
+	articles, err := parseGeekNewsRSS(rssContent)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	list := createArticleList(articles)
-	return list, nil
+	return list, articles, nil
 }
 
 func createInputHandler(app *tview.Application, list *tview.List, articles []Article, pages *tview.Pages) func(event *tcell.EventKey) *tcell.EventKey {
+	// Store articles in closure for refresh
+	currentArticles := articles
+
 	return func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyCtrlC:
 			app.Stop()
 			return nil
 		case tcell.KeyRight:
-			nextPage(pages, app, articles, list)
+			nextPage(pages, app, currentArticles, list)
 			return nil
 		case tcell.KeyLeft:
 			backPage(pages)
@@ -76,20 +61,24 @@ func createInputHandler(app *tview.Application, list *tview.List, articles []Art
 			case 'k':
 				return tcell.NewEventKey(tcell.KeyUp, 0, tcell.ModNone)
 			case 'l':
-				nextPage(pages, app, articles, list)
+				nextPage(pages, app, currentArticles, list)
 				return nil
 			case 'h':
 				backPage(pages)
 				return nil
 			case ' ':
-				openURL(articles[list.GetCurrentItem()].Link)
+				openArticleInBrowser(currentArticles[list.GetCurrentItem()])
 				return nil
 			case 'c':
-				openURL(hackerNewsURL + articles[list.GetCurrentItem()].CommentsLink)
+				openCommentsInBrowser(currentArticles[list.GetCurrentItem()])
 				return nil
 			case 'r':
-				list.Clear()
-				refreshedList, _ := fetchAndGenerateList(hackerNewsURL)
+				refreshedList, newArticles, err := fetchAndGenerateList()
+				if err != nil {
+					// Show error but don't crash
+					return nil
+				}
+				currentArticles = newArticles
 				pages.AddPage("homepage", refreshedList, true, false)
 				app.SetRoot(refreshedList, true).Run()
 			}
@@ -100,7 +89,6 @@ func createInputHandler(app *tview.Application, list *tview.List, articles []Art
 }
 
 func backPage(pages *tview.Pages) {
-	// TODO: navigation flow will become configurable
 	currentPage, _ := pages.GetFrontPage()
 	if currentPage == "comments" {
 		pages.SwitchToPage("homepage")
@@ -113,45 +101,59 @@ func backPage(pages *tview.Pages) {
 func nextPage(pages *tview.Pages, app *tview.Application, articles []Article, list *tview.List) {
 	currentPage, _ := pages.GetFrontPage()
 	if currentPage == "comments" {
-		openArticle(app, articles[list.GetCurrentItem()].Link, pages)
+		openArticle(app, articles[list.GetCurrentItem()], pages)
 	} else {
-		openComments(app, articles[list.GetCurrentItem()].CommentsLink, pages)
+		openComments(app, articles[list.GetCurrentItem()], pages)
 	}
 }
 
-func openComments(app *tview.Application, commentsLink string, pages *tview.Pages) {
-	u, err := url.Parse(commentsLink)
-	if err != nil {
-		fmt.Println("Error parsing URL:", err) // TODO maybe alert dialogbox
+func openComments(app *tview.Application, article Article, pages *tview.Pages) {
+	topicID := extractTopicID(article.CommentsLink)
+	if topicID == "" {
+		displayComments(app, pages, "토픽 ID를 찾을 수 없습니다.")
 		return
 	}
-	story_id := u.Query().Get("id")
 
-	articleStringList := fetchComments(story_id)
-	commentsText := ""
-	for _, articleString := range articleStringList {
-		commentsText += articleString + "\n"
-	}
-
-	if commentsText == "" {
-		commentsText = "Story has no comments yet. Press RIGHT ARROW or letter 'l' to continue with the article."
-	}
+	commentLines := fetchGeekNewsComments(topicID)
+	commentsText := strings.Join(commentLines, "\n")
 
 	displayComments(app, pages, commentsText)
 }
 
-func openArticle(app *tview.Application, articleLink string, pages *tview.Pages) {
-	if !strings.HasPrefix(articleLink, "http") {
-		return // avoid trying to open relative pages like item?id=1234 like Ask HN
+func openArticle(app *tview.Application, article Article, pages *tview.Pages) {
+	// Try to get external link - first check if we have it cached
+	externalLink := article.Link
+
+	// If no external link, fetch from topic page
+	if externalLink == "" {
+		var err error
+		externalLink, err = fetchExternalLink(article.CommentsLink)
+		if err != nil || externalLink == "" {
+			displayArticle(app, pages, "기사 링크를 찾을 수 없습니다. 'c' 키를 눌러 GeekNews 페이지에서 확인하세요.")
+			return
+		}
 	}
-	articleText := getArticleTextFromLink(articleLink)
+
+	// Check if it's an internal GeekNews link (Ask GN style posts)
+	if !strings.HasPrefix(externalLink, "http") {
+		displayArticle(app, pages, "이 게시물은 외부 링크가 없습니다. 'c' 키를 눌러 GeekNews에서 확인하세요.")
+		return
+	}
+
+	articleText := getArticleTextFromLink(externalLink)
+	if articleText == "" {
+		displayArticle(app, pages, "기사 내용을 추출할 수 없습니다. 'space' 키를 눌러 브라우저에서 열어보세요.")
+		return
+	}
+
 	displayArticle(app, pages, articleText)
 }
 
 func getArticleTextFromLink(url string) string {
 	article, err := articletext.GetArticleTextFromUrl(url)
 	if err != nil {
-		fmt.Printf("Failed to parse %s, %v\n", url, err)
+		fmt.Printf("기사 파싱 실패 %s, %v\n", url, err)
+		return ""
 	}
 	return article
 }
@@ -174,6 +176,35 @@ func displayComments(app *tview.Application, pages *tview.Pages, text string) {
 
 	pages.AddPage("comments", commentsTextView, true, true)
 	app.SetRoot(pages, true)
+}
+
+// openArticleInBrowser opens the article's external link in the browser
+func openArticleInBrowser(article Article) {
+	externalLink := article.Link
+
+	// If no cached external link, fetch it
+	if externalLink == "" {
+		var err error
+		externalLink, err = fetchExternalLink(article.CommentsLink)
+		if err != nil || externalLink == "" {
+			// Fall back to opening the topic page
+			openURL(article.CommentsLink)
+			return
+		}
+	}
+
+	openURL(externalLink)
+}
+
+// openCommentsInBrowser opens the comments page in the browser
+func openCommentsInBrowser(article Article) {
+	topicID := extractTopicID(article.CommentsLink)
+	if topicID == "" {
+		openURL(article.CommentsLink)
+		return
+	}
+	commentsURL := geekNewsBaseURL + "topic?go=comments&id=" + topicID
+	openURL(commentsURL)
 }
 
 func openURL(url string) {

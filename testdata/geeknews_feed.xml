@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom'>
+<title>GeekNews - 개발/기술/스타트업 뉴스 서비스</title>
+<subtitle>개발 뉴스, 기술 관련 새소식, 스타트업 정보와 노하우, 세상의 재미난 것들을 좋아하는 사람들을 위한 뉴스 사이트. 이메일 뉴스레터/X(Twitter)/슬랙 봇으로 구독 가능</subtitle>
+<link ref='alternate' type='text/html' href='https://news.hada.io' />
+<link ref='self' type='application/atom+xml' href='https://news.hada.io/rss/news' />
+<id>https://news.hada.io/rss/news</id>
+<author>
+<name>GeekNews</name>
+<email>news@hada.io</email>
+<uri>https://news.hada.io</uri>
+</author>
+<updated>2026-02-03T15:18:15+09:00</updated>
+<icon>https://social.news.hada.io/favicon.png</icon>
+<logo>https://social.news.hada.io/WideLogo500.png</logo>
+<category term='technology'/>
+<entry>
+  <title><![CDATA[AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견]]></title>
+  <link rel='alternate' type='text/html' href='https://news.hada.io/topic?id=26364' />
+  <id>https://news.hada.io/topic?id=26364</id>
+  <updated>2026-02-03T14:31:13+09:00</updated>
+  <published>2026-02-03T14:31:13+09:00</published>
+  <author>
+    <name>davespark</name>
+    <uri>https://news.hada.io/user?id=davespark</uri>
+  </author>
+  <content type='html' xml:lang='ko'><![CDATA[<p><strong>핵심 한 줄 요약</strong><br />
+AI 코딩 도구는 사용 방식에 따라 학습을 돕거나 망칠 수 있다. 개념 이해를 위한 적극적 질문이 핵심이며, 완전 위임은 속도도 학습도 모두 놓친다.</p>
+<p><strong>연구 개요</strong></p>
+<ul>
+<li>Anthropic 연구팀 진행</li>
+<li>대상: 52명 소프트웨어 엔지니어</li>
+...</p>]]></content>
+</entry><entry>
+  <title><![CDATA[Todd C. Miller – 30년 넘게 Sudo를 유지보수한 개발자]]></title>
+  <link rel='alternate' type='text/html' href='https://news.hada.io/topic?id=26363' />
+  <id>https://news.hada.io/topic?id=26363</id>
+  <updated>2026-02-03T13:32:45+09:00</updated>
+  <published>2026-02-03T13:32:45+09:00</published>
+  <author>
+    <name>neo</name>
+    <uri>https://news.hada.io/user?id=neo</uri>
+  </author>
+  <content type='html' xml:lang='ko'><![CDATA[<ul>
+<li>
+<strong>Sudo 프로젝트의 주요 유지관리자</strong>로 30년 이상 활동하며, 현재는 지속적인 유지보수와 개발을 위한 <strong>후원자를 찾고 있음</strong>
+</li>
+<li>개인 웹사이트에는 <strong>논문, 이력서, TiVo 해킹 자료, OpenBSD 관련 작업</strong> 등 다양한 기술 자료가 정리되어 있음</li>
+<li>
+<s...</p>]]></content>
+</entry>
+</feed>

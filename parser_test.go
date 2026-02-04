@@ -1,147 +1,169 @@
 package main
 
 import (
+	"os"
 	"testing"
 )
 
-func TestParseArticles(t *testing.T) {
-	htmlContent := `
-<table>
-    <tr class="athing">
-        <td align="right" valign="top" class="title"><span class="rank">1.</span></td>
-        <td valign="top" class="votelinks">
-            <center><a id='up_40477653' href='vote?id=40477653&amp;how=up&amp;goto=news'>
-                    <div class='votearrow' title='upvote'></div>
-                </a></center>
-        </td>
-        <td class="title"><span class="titleline"><a
-                    href="https://newscenter.lbl.gov/2012/05/16/majorana-demonstrator/">Majorana, the search for the most elusive neutrino of all</a><span class="sitebit comhead"> (<a href="from?site=lbl.gov"><span
-                            class="sitestr">lbl.gov</span></a>)</span></span></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td class="subtext"><span class="subline">
-                <span class="score" id="score_40477653">23 points</span> by <a href="user?id=bilsbie"
-                    class="hnuser">bilsbie</a> <span class="age" title="2024-05-25T20:35:59"><a
-                        href="item?id=40477653">2 hours ago</a></span> <span id="unv_40477653"></span> | <a
-                    href="hide?id=40477653&amp;goto=news">hide</a> | <a href="item?id=40477653">1&nbsp;comment</a>
-            </span>
-        </td>
-    </tr>
-    <tr class="athing">
-        <td align="right" valign="top" class="title"><span class="rank">2.</span></td>
-        <td valign="top" class="votelinks">
-            <center><a id='up_40474712' href='vote?id=40474712&amp;how=up&amp;goto=news'>
-                    <div class='votearrow' title='upvote'></div>
-                </a></center>
-        </td>
-        <td class="title"><span class="titleline"><a
-                    href="https://reverse.put.as/2024/05/24/abusing-go-infrastructure/">Abusing Go&#x27;s Infrastructure</a><span class="sitebit comhead"> (<a href="from?site=put.as"><span
-                            class="sitestr">put.as</span></a>)</span></span></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td class="subtext"><span class="subline">
-                <span class="score" id="score_40474712">298 points</span> by <a href="user?id=efge"
-                    class="hnuser">efge</a> <span class="age" title="2024-05-25T12:50:00"><a href="item?id=40474712">10
-                        hours ago</a></span> <span id="unv_40474712"></span> | <a
-                    href="hide?id=40474712&amp;goto=news">hide</a> | <a href="item?id=40474712">62&nbsp;comments</a>
-            </span>
-        </td>
-    </tr>
-</table>`
-
-	expectedArticles := []Article{
-		{Title: "Majorana, the search for the most elusive neutrino of all", Link: "https://newscenter.lbl.gov/2012/05/16/majorana-demonstrator/", Comments: 1, CommentsLink: "item?id=40477653"},
-		{Title: "Abusing Go's Infrastructure", Link: "https://reverse.put.as/2024/05/24/abusing-go-infrastructure/", Comments: 62, CommentsLink: "item?id=40474712"},
+func TestParseGeekNewsRSS(t *testing.T) {
+	xmlContent, err := os.ReadFile("testdata/geeknews_feed.xml")
+	if err != nil {
+		t.Fatalf("Failed to read test fixture: %v", err)
 	}
 
-	articles, err := parseArticles(htmlContent)
+	articles, err := parseGeekNewsRSS(string(xmlContent))
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
 
-	if len(articles) != len(expectedArticles) {
-		t.Fatalf("Expected %d articles, got %d", len(expectedArticles), len(articles))
+	if len(articles) != 2 {
+		t.Fatalf("Expected 2 articles, got %d", len(articles))
 	}
 
-	for i, article := range articles {
-		if article.Title != expectedArticles[i].Title {
-			t.Errorf("Expected title %q, got %q", expectedArticles[i].Title, article.Title)
+	// Test first article
+	if articles[0].Title != "AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견" {
+		t.Errorf("Expected title containing 'AI 코딩 도구', got %q", articles[0].Title)
+	}
+	if articles[0].CommentsLink != "https://news.hada.io/topic?id=26364" {
+		t.Errorf("Expected CommentsLink 'https://news.hada.io/topic?id=26364', got %q", articles[0].CommentsLink)
+	}
+	if articles[0].Comments != "" {
+		t.Errorf("Expected empty Comments field, got %q", articles[0].Comments)
+	}
+	if articles[0].Domain != "news.hada.io" {
+		t.Errorf("Expected Domain 'news.hada.io', got %q", articles[0].Domain)
+	}
+
+	// Test second article
+	if articles[1].Title != "Todd C. Miller – 30년 넘게 Sudo를 유지보수한 개발자" {
+		t.Errorf("Expected title containing 'Sudo', got %q", articles[1].Title)
+	}
+	if articles[1].CommentsLink != "https://news.hada.io/topic?id=26363" {
+		t.Errorf("Expected CommentsLink 'https://news.hada.io/topic?id=26363', got %q", articles[1].CommentsLink)
+	}
+}
+
+func TestParseGeekNewsRSS_EmptyFeed(t *testing.T) {
+	emptyFeed := `<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom'>
+<title>GeekNews</title>
+</feed>`
+
+	articles, err := parseGeekNewsRSS(emptyFeed)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	if len(articles) != 0 {
+		t.Errorf("Expected 0 articles, got %d", len(articles))
+	}
+}
+
+func TestParseGeekNewsRSS_InvalidXML(t *testing.T) {
+	invalidXML := "not valid xml at all"
+
+	_, err := parseGeekNewsRSS(invalidXML)
+	if err == nil {
+		t.Error("Expected error for invalid XML, got nil")
+	}
+}
+
+func TestParseGeekNewsComments(t *testing.T) {
+	htmlContent, err := os.ReadFile("testdata/geeknews_topic_comments.html")
+	if err != nil {
+		t.Fatalf("Failed to read test fixture: %v", err)
+	}
+
+	comments, err := parseGeekNewsComments(string(htmlContent))
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	if len(comments) == 0 {
+		t.Fatal("Expected comments, got none")
+	}
+
+	// Test first comment (depth 0)
+	firstComment := comments[0]
+	if firstComment.Author != "kuthia" {
+		t.Errorf("Expected author 'kuthia', got %q", firstComment.Author)
+	}
+	if firstComment.Depth != 0 {
+		t.Errorf("Expected depth 0, got %d", firstComment.Depth)
+	}
+	if firstComment.ID != "50523" {
+		t.Errorf("Expected ID '50523', got %q", firstComment.ID)
+	}
+	if firstComment.Body == "" {
+		t.Error("Expected non-empty body")
+	}
+	// Check time
+	if firstComment.Time != "5시간전" {
+		t.Errorf("Expected time '5시간전', got %q", firstComment.Time)
+	}
+
+	// Test second comment (depth 1 - reply)
+	if len(comments) > 1 {
+		secondComment := comments[1]
+		if secondComment.Depth != 1 {
+			t.Errorf("Expected depth 1 for second comment, got %d", secondComment.Depth)
 		}
-		if article.Link != expectedArticles[i].Link {
-			t.Errorf("Expected link %q, got %q", expectedArticles[i].Link, article.Link)
-		}
-		if article.Comments != expectedArticles[i].Comments {
-			t.Errorf("Expected comments %d, got %d", expectedArticles[i].Comments, article.Comments)
-		}
-		if article.CommentsLink != expectedArticles[i].CommentsLink {
-			t.Errorf("Expected comments link %q, got %q", expectedArticles[i].CommentsLink, article.CommentsLink)
+		if secondComment.Author != "gracefullight" {
+			t.Errorf("Expected author 'gracefullight', got %q", secondComment.Author)
 		}
 	}
 }
 
-// func TestParseArticles(t *testing.T) {
-// 	t.Run("Empty HTML", func(t *testing.T) {
-// 		articles, err := parseArticles("")
-// 		assert.NoError(t, err)
-// 		assert.Empty(t, articles)
-// 	})
+func TestParseGeekNewsComments_Empty(t *testing.T) {
+	emptyHTML := `<div id='comment_thread' class='comment_thread'></div>`
 
-// 	t.Run("Valid HTML", func(t *testing.T) {
-// 		html := `
-// 			<tr class="athing">
-// 				<td class="title">
-// 					<span class="titleline">
-// 						<a href="https://example.com">Article 1</a>
-// 					</span>
-// 				</td>
-// 			</tr>
-// 			<tr class="athing">
-// 				<td class="title">
-// 					<span class="titleline">
-// 						<a href="https://example.com/2">Article 2</a>
-// 					</span>
-// 				</td>
-// 			</tr>
-// 		`
-// 		articles, err := parseArticles(html)
-// 		assert.NoError(t, err)
-// 		assert.Len(t, articles, 2)
-// 		assert.Equal(t, "Article 1", articles[0].Title)
-// 		assert.Equal(t, "https://example.com", articles[0].Link)
-// 		assert.Equal(t, "Article 2", articles[1].Title)
-// 		assert.Equal(t, "https://example.com/2", articles[1].Link)
-// 	})
+	comments, err := parseGeekNewsComments(emptyHTML)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
 
-// 	t.Run("Error in goquery", func(t *testing.T) {
-// 		doc := &goquery.Document{}
-// 		// doc.SetError(fmt.Errorf("test error"))
-// 		articles, err := parseArticlesFromDocument(doc)
-// 		assert.Error(t, err)
-// 		assert.Nil(t, articles)
-// 	})
-// }
+	if len(comments) != 0 {
+		t.Errorf("Expected 0 comments, got %d", len(comments))
+	}
+}
 
-// func parseArticlesFromDocument(doc *goquery.Document) ([]Article, error) {
-// 	var articles []Article
+func TestExtractTopicID(t *testing.T) {
+	tests := []struct {
+		url      string
+		expected string
+	}{
+		{"https://news.hada.io/topic?id=26364", "26364"},
+		{"https://news.hada.io/topic?id=12345&other=param", "12345"},
+		{"https://news.hada.io/topic?go=comments&id=26364", "26364"},
+		{"https://news.hada.io/topic", ""},
+		{"invalid url", ""},
+		{"", ""},
+	}
 
-// 	doc.Find("tr.athing").Each(func(i int, s *goquery.Selection) {
-// 		title := s.Find("td.title > span.titleline > a").Text()
-// 		link, _ := s.Find("td.title > span.titleline > a").Attr("href")
-// 		commentsCount, err := extractCommentsCount(s)
-// 		if err != nil {
-// 			commentsCount = 0
-// 		}
+	for _, test := range tests {
+		result := extractTopicID(test.url)
+		if result != test.expected {
+			t.Errorf("extractTopicID(%q) = %q, expected %q", test.url, result, test.expected)
+		}
+	}
+}
 
-// 		article := Article{
-// 			Title:    title,
-// 			Link:     link,
-// 			Comments: commentsCount,
-// 		}
+func TestExtractDomainFromURL(t *testing.T) {
+	tests := []struct {
+		url      string
+		expected string
+	}{
+		{"https://example.com/path", "example.com"},
+		{"https://www.example.com/path?query=1", "www.example.com"},
+		{"http://sub.domain.org:8080/", "sub.domain.org:8080"},
+		{"invalid url", ""},
+		{"", ""},
+	}
 
-// 		articles = append(articles, article)
-// 	})
-
-// 	return articles, nil
-// }
+	for _, test := range tests {
+		result := extractDomainFromURL(test.url)
+		if result != test.expected {
+			t.Errorf("extractDomainFromURL(%q) = %q, expected %q", test.url, result, test.expected)
+		}
+	}
+}
