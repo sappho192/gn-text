@@ -33,22 +33,91 @@ func sanitize(input string) string {
 
 // fetchGeekNewsComments fetches and formats comments for a GeekNews topic
 func fetchGeekNewsComments(topicID string) []string {
-	commentsURL := geekNewsBaseURL + "topic?go=comments&id=" + topicID
-	html, err := fetchWebpage(commentsURL)
+	// Fetch the full topic page (not just comments) to get body content
+	topicURL := geekNewsBaseURL + "topic?id=" + topicID
+	html, err := fetchWebpage(topicURL)
 	if err != nil {
-		return []string{"댓글을 불러오는데 실패했습니다: " + err.Error()}
+		return []string{"페이지를 불러오는데 실패했습니다: " + err.Error()}
 	}
 
+	var lines []string
+
+	// Parse and display topic content (body)
+	topicContent, err := parseGeekNewsTopicContent(html)
+	if err == nil && topicContent.Body != "" {
+		lines = append(lines, formatTopicContent(topicContent)...)
+		lines = append(lines, "")
+		lines = append(lines, "───────────────────────────────────────────────────────────")
+		lines = append(lines, "")
+	}
+
+	// Parse comments
 	comments, err := parseGeekNewsComments(html)
 	if err != nil {
-		return []string{"댓글을 파싱하는데 실패했습니다: " + err.Error()}
+		lines = append(lines, "댓글을 파싱하는데 실패했습니다: "+err.Error())
+		return lines
 	}
 
 	if len(comments) == 0 {
-		return []string{"아직 댓글이 없습니다. 오른쪽 화살표 또는 'l' 키를 눌러 기사를 읽어보세요."}
+		lines = append(lines, "아직 댓글이 없습니다. 오른쪽 화살표 또는 'l' 키를 눌러 기사를 읽어보세요.")
+		return lines
 	}
 
-	return formatComments(comments)
+	lines = append(lines, formatComments(comments)...)
+	return lines
+}
+
+// formatTopicContent formats the topic content (title, meta, body) for display
+func formatTopicContent(content *TopicContent) []string {
+	var lines []string
+	maxWidth := 60
+
+	// Title
+	if content.Title != "" {
+		lines = append(lines, "[yellow]"+content.Title+"[-]")
+		lines = append(lines, "")
+	}
+
+	// Meta info (author, time, points)
+	var meta []string
+	if content.Author != "" {
+		meta = append(meta, content.Author)
+	}
+	if content.Time != "" {
+		meta = append(meta, content.Time)
+	}
+	if content.Points != "" {
+		meta = append(meta, content.Points+"P")
+	}
+	if len(meta) > 0 {
+		lines = append(lines, "[gray]"+strings.Join(meta, " · ")+"[-]")
+		lines = append(lines, "")
+	}
+
+	// Body content
+	if content.Body != "" {
+		// Split body into paragraphs and wrap each
+		paragraphs := strings.Split(content.Body, "\n\n")
+		for _, paragraph := range paragraphs {
+			paragraph = strings.TrimSpace(paragraph)
+			if paragraph == "" {
+				continue
+			}
+			// Handle single newlines as line breaks within paragraph
+			subLines := strings.Split(paragraph, "\n")
+			for _, subLine := range subLines {
+				subLine = strings.TrimSpace(subLine)
+				if subLine == "" {
+					continue
+				}
+				wrappedLines := wrapTextWithRuneWidth(subLine, maxWidth, "")
+				lines = append(lines, wrappedLines...)
+			}
+			lines = append(lines, "")
+		}
+	}
+
+	return lines
 }
 
 // formatComments formats a list of comments for display

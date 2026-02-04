@@ -149,6 +149,16 @@ func parseGeekNewsComments(htmlContent string) ([]Comment, error) {
 	return comments, nil
 }
 
+// TopicContent represents the parsed content of a GeekNews topic page
+type TopicContent struct {
+	Title        string
+	ExternalLink string
+	Body         string // Topic description/summary
+	Author       string
+	Time         string
+	Points       string
+}
+
 // parseGeekNewsTopicLink extracts the external article link from a topic page
 func parseGeekNewsTopicLink(htmlContent string) (string, string, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlContent))
@@ -184,6 +194,55 @@ func parseGeekNewsTopicLink(htmlContent string) (string, string, error) {
 	}
 
 	return externalLink, title, nil
+}
+
+// parseGeekNewsTopicContent extracts the full topic content including body
+func parseGeekNewsTopicContent(htmlContent string) (*TopicContent, error) {
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(htmlContent))
+	if err != nil {
+		return nil, err
+	}
+
+	content := &TopicContent{}
+
+	// Extract title
+	titleSel := doc.Find(".topictitle h1").First()
+	if titleSel.Length() > 0 {
+		content.Title = strings.TrimSpace(titleSel.Text())
+	}
+
+	// Extract external link
+	linkSel := doc.Find(".topictitle.link > a, .topictitle > a").First()
+	if linkSel.Length() > 0 {
+		content.ExternalLink, _ = linkSel.Attr("href")
+	}
+
+	// Extract body from #topic_contents
+	bodySel := doc.Find("#topic_contents")
+	if bodySel.Length() > 0 {
+		bodyHTML, _ := bodySel.Html()
+		content.Body = sanitize(bodyHTML)
+	}
+
+	// Extract author
+	authorSel := doc.Find(".topicinfo a[href^='/user?id=']").First()
+	if authorSel.Length() > 0 {
+		content.Author = authorSel.Text()
+	}
+
+	// Extract time
+	timeSel := doc.Find(".topicinfo span[title]").First()
+	if timeSel.Length() > 0 {
+		content.Time = strings.TrimSpace(timeSel.Text())
+	}
+
+	// Extract points
+	pointsSel := doc.Find(".topicinfo span[id^='tp']").First()
+	if pointsSel.Length() > 0 {
+		content.Points = pointsSel.Text()
+	}
+
+	return content, nil
 }
 
 // extractDomainFromURL extracts the domain from a URL

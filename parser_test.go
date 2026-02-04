@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -145,6 +146,70 @@ func TestExtractTopicID(t *testing.T) {
 		if result != test.expected {
 			t.Errorf("extractTopicID(%q) = %q, expected %q", test.url, result, test.expected)
 		}
+	}
+}
+
+func TestParseGeekNewsTopicContent(t *testing.T) {
+	htmlContent, err := os.ReadFile("testdata/geeknews_topic_full.html")
+	if err != nil {
+		t.Fatalf("Failed to read test fixture: %v", err)
+	}
+
+	content, err := parseGeekNewsTopicContent(string(htmlContent))
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	// Test title
+	if content.Title == "" {
+		t.Error("Expected non-empty title")
+	}
+	if !strings.Contains(content.Title, "AI 코딩 도구") {
+		t.Errorf("Expected title to contain 'AI 코딩 도구', got %q", content.Title)
+	}
+
+	// Test external link
+	if content.ExternalLink == "" {
+		t.Error("Expected non-empty external link")
+	}
+	if !strings.Contains(content.ExternalLink, "anthropic.com") {
+		t.Errorf("Expected external link to contain 'anthropic.com', got %q", content.ExternalLink)
+	}
+
+	// Test body
+	if content.Body == "" {
+		t.Error("Expected non-empty body")
+	}
+	if !strings.Contains(content.Body, "핵심") {
+		t.Errorf("Expected body to contain '핵심', got %q", content.Body)
+	}
+
+	// Test author
+	if content.Author == "" {
+		t.Error("Expected non-empty author")
+	}
+
+	// Test points
+	if content.Points == "" {
+		t.Error("Expected non-empty points")
+	}
+}
+
+func TestParseGeekNewsTopicContent_NoBody(t *testing.T) {
+	// Test with minimal HTML (no topic_contents)
+	minimalHTML := `<div class="topictitle"><a href="https://example.com"><h1>Test Title</h1></a></div>`
+
+	content, err := parseGeekNewsTopicContent(minimalHTML)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	if content.Title != "Test Title" {
+		t.Errorf("Expected title 'Test Title', got %q", content.Title)
+	}
+
+	if content.Body != "" {
+		t.Errorf("Expected empty body, got %q", content.Body)
 	}
 }
 

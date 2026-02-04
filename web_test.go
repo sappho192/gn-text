@@ -156,6 +156,70 @@ func TestFormatCommentsEmpty(t *testing.T) {
 	}
 }
 
+func TestFormatTopicContent(t *testing.T) {
+	content := &TopicContent{
+		Title:        "테스트 제목",
+		ExternalLink: "https://example.com/article",
+		Body:         "본문 내용입니다.\n\n두 번째 문단입니다.",
+		Author:       "testuser",
+		Time:         "1시간전",
+		Points:       "42",
+	}
+
+	lines := formatTopicContent(content)
+
+	if len(lines) == 0 {
+		t.Error("Expected formatted lines")
+	}
+
+	// Check title is included (with color tags)
+	foundTitle := false
+	for _, line := range lines {
+		if strings.Contains(line, "테스트 제목") {
+			foundTitle = true
+			break
+		}
+	}
+	if !foundTitle {
+		t.Error("Expected title in formatted output")
+	}
+
+	// Check meta info is included
+	foundMeta := false
+	for _, line := range lines {
+		if strings.Contains(line, "testuser") && strings.Contains(line, "42P") {
+			foundMeta = true
+			break
+		}
+	}
+	if !foundMeta {
+		t.Error("Expected meta info (author, points) in formatted output")
+	}
+
+	// Check body content is included
+	foundBody := false
+	for _, line := range lines {
+		if strings.Contains(line, "본문 내용") {
+			foundBody = true
+			break
+		}
+	}
+	if !foundBody {
+		t.Error("Expected body content in formatted output")
+	}
+}
+
+func TestFormatTopicContentEmpty(t *testing.T) {
+	content := &TopicContent{}
+
+	lines := formatTopicContent(content)
+
+	// Empty content should produce no lines
+	if len(lines) != 0 {
+		t.Errorf("Expected empty result for empty content, got %v", lines)
+	}
+}
+
 func TestFormatCommentsDeletedComment(t *testing.T) {
 	comments := []Comment{
 		{

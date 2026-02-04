@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="KR">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <script src="/vendor/markdown-it.min.js"></script>
+        <link rel="stylesheet" href="/vendor/highlight-default.min.css">
+        <script src="/vendor/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+                <!-- Global site tag (gtag.js) - Google Analytics v4 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-MCD87E7SF0"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-MCD87E7SF0');
+        </script>
+                        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width">
+        <title>AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견 | GeekNews</title>
+        <meta name="description" content="핵심 한 줄 요약AI 코딩 도구는 사용 방식에 따라 학습을 돕거나 망칠 수 있다. 개념 이해를 위한 적극적 질문이 핵심이며, 완전 위임은 속도도 학습도 모두 놓친다.연구 개요Anthropic 연구팀 진행대상: 52명 소프트웨어 엔지니어실험 설계: 새로운 Python 라이브러리(Trio) 학습 후 코딩 작업 수행AI 그룹: GPT-4o 기반 AI 코딩 도구 ">
+
+        <meta property="og:url" content="https://news.hada.io/topic?id=26364" />
+        <meta property="og:title" content="AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견 | GeekNews" />
+            <meta property="og:image" content="https://social.news.hada.io/topic/26364" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="robots" content="max-image-preview:large">
+            <meta property="og:locale" content="ko_KR" />
+        <meta property="og:site_name" content="GeekNews" />
+        <meta property="og:description" content="핵심 한 줄 요약AI 코딩 도구는 사용 방식에 따라 학습을 돕거나 망칠 수 있다. 개념 이해를 위한 적극적 질문이 핵심이며, 완전 위임은 속도도 학습도 모두 놓친다.연구 개요Anthropic 연구팀 진행대상: 52명 소프트웨어 엔지니어실험 설계: 새로운 Python 라이브러리(Trio) 학습 후 코딩 작업 수행AI 그룹: GPT-4o 기반 AI 코딩 도구 " />
+        <meta property='fb:app_id' content="2417316805247011" />
+
+            <meta name="twitter:image" content="https://social.news.hada.io/topic/26364" />
+            <meta name="twitter:title" content="AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견 | GeekNews" />
+        <meta name="twitter:creator" content="@GeekNewsHada" />
+        <meta name="twitter:site" content="@GeekNewsHada" />
+        <meta name="twitter:description" content="핵심 한 줄 요약AI 코딩 도구는 사용 방식에 따라 학습을 돕거나 망칠 수 있다. 개념 이해를 위한 적극적 질문이 핵심이며, 완전 위임은 속도도 학습도 모두 놓친다.연구 개요Anthropic 연구팀 진행대상: 52명 소프트웨어 엔지니어실험 설계: 새로운 Python 라이브러리(Trio) 학습 후 코딩 작업 수행AI 그룹: GPT-4o 기반 AI 코딩 도구 " />
+
+            <meta property="og:type" content="article" />
+        <meta property="article:published_time" content="2026-02-03T14:31:13+09:00" />
+        <meta property="article:author" content="davespark" />
+        <meta property="article:section" content="Topic" />
+        <meta name="twitter:card" content="summary_large_image" />
+            
+        <script type="application/ld+json">{
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://news.hada.io/topic?id=26364",
+        "name": "AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견"
+    },
+    "headline": "AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견",
+    "thumbnailUrl": "https://social.news.hada.io/topic/26364",
+    "image": [
+        "https://social.news.hada.io/topic/26364"
+    ],
+    "datePublished": "2026-02-03T14:31:13+09:00",
+    "author": {
+        "@type": "Person",
+        "name": "davespark"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "GeekNews",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://news.hada.io/logo_newsarticle.png"
+        }
+    },
+    "description": "&lt;p&gt;&lt;strong&gt;핵심 한 줄 요약&lt;/strong&gt;&lt;br /&gt;\nAI 코딩 도구는 사용 방식에 따라 학습을 돕거나 망칠 수 있다. 개념 이해를 위한 적극적 질문이 핵심...",
+    "dateModified": "2026-02-03T14:31:13+09:00",
+    "commentCount": 8
+}</script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/vendor/hotkeys.min.js"></script>
+
+        <link rel="stylesheet" href="/assets/main.css?20251218a"  type="text/css" />
+        <link rel="manifest" href="/manifest.json?20240404a">
+        <meta name="theme-color" content="#000065">
+        <meta name="google-site-verification" content="xfNJ7NBfDxPJBTNxTxSIQ7UVPA5zwPKBCC6STmWrQYE" />
+        <script src="/assets/main.js?20230914" type="text/javascript"></script>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR" >
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji&display=swap" rel="stylesheet">
+        <link rel="webmention" href="https://webmention.io/news.hada.io/webmention" />
+        <link rel="pingback" href="https://webmention.io/news.hada.io/xmlrpc" />
+        <script>
+			function getUrlParameter(name) {
+				name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+				var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+				var results = regex.exec(location.search);
+				return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+			};
+
+            function submitReply(form) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/comments',
+                    data: $(".write_reply").serialize(),
+                    success: function(data)
+                    {
+                        if (data.status) {
+                            window.location.href = "topic?id="+data.id+"#cid"+data.cid;
+                            location.reload();
+                        } else {
+                            if (data.code == 211) {
+                                document.getElementById('msg').innerText = "가입 후 일주일이 지나야 댓글을 작성할 수 있습니다.";
+                            } else if (data.code == 213) {
+                                document.getElementById('msg').innerText = "비정상적인 사용으로 계정이 정지되었습니다.";
+                            } else if (data.code == 490) {
+                                document.getElementById('msg').innerText = "의견을 조금 더 길게 작성해주세요.";
+                            } else {
+                                document.getElementById('msg').innerText = "알 수 없는 에러입니다.";
+                            }
+                        }
+                    }
+                });
+            }
+
+            $(function() {
+                $(".cmtreply").on('click', function(e) {
+                    e.preventDefault();
+
+                    // 비활성화된 답변달기 버튼은 클릭 무시
+                    if ($(this).hasClass('disabled')) {
+                        return false;
+                    }
+                    var topic_watched = null;
+                    var verified = document.getElementById('verified').value;
+
+                    var userid = $("#userid").val();
+                    if (userid == null || userid == '') {
+                        window.location.href = "login?code=101&return=" + encodeURI('/topic?id='+$(this).data('tid'));
+                    } else if (!$(this).parent().has('form').length) {
+                        $('.write_reply').remove();                      
+
+                        if (!topic_watched && $(this).data('watchable') && !$(this).data('watch')) {
+                            cmtwatch = '<span id="watch' + $(this).data('cid')+'"><label class=smalltext><input id="watchcheck' + $(this).data('cid')+'" data-cid="' + $(this).data('cid')+ '" name="watch" type="checkbox" class="check"';
+                            if (verified) {
+                                cmtwatch += ' checked';
+                            }
+                            cmtwatch += '><span id="watchmsg' + $(this).data('cid')+'">댓글 알림 받기</span></label>\
+                                <div class=inline>\
+                                <input type="email" id="email' + $(this).data('cid')+'" name="email"  value="" style="width:180px" placeholder="댓글 알림받을 이메일 주소" hidden> \
+                                <input id="verify_email_btn' + $(this).data('cid')+'"  data-cid="' + $(this).data('cid')+ '" type="button" value="이메일 인증" hidden> \
+                                </div> \
+                            </span>';
+                        } else {
+                            cmtwatch = '';
+                        }
+
+                        cmtform = '<form class="write_reply" autocomplete="off" onsubmit="return replace2spaces(\'reply_contents\')"> \
+                        <div class="table_reply comment-table"> \
+                            <div> \
+                                <textarea id="reply_contents" rows=5 style="width:100%" name="contents" class="comment_textarea" required placeholder="• 친절하고 점잖은 댓글을 남겨주세요\n• 주제와 관련된 내용으로 작성해주세요"></textarea> \
+                            </div>\
+                            <div style="display: grid; grid-template-columns: auto 100px"> \
+                                <div> ' + cmtwatch + '</div> \
+                                <input type="submit" class="reply_button" value="답변 달기"> \
+                                <div id="authmsg' + $(this).data('cid')+'" class="inline watch" style="display: none; grid-column: 1 / 3">인증 이메일 클릭후 다시 체크박스를 눌러주세요</div>\
+                                <input type="hidden" name="dynamic" value="true"> \
+                                <input type="hidden" name="parent_id" value="' + $(this).data('cid') +  '"> \
+                                <input type="hidden" name="tid" value="' + $(this).data('tid') + '"> \
+                            </div> \
+                        </div> \
+                        </form> \
+                        ';
+
+
+                        $(this).parent().append(cmtform);
+                        $(document).on('click','#watchcheck' + $(this).data('cid'),function(){
+                            var userid = document.getElementById('userid').value;
+                            var verified = document.getElementById('verified').value;
+                            var email = document.getElementById('email').value;
+                            if ($(this).is(":checked")) {
+                                if (!email || !verified) {
+                                    var cmtwatch = $(this).data('cid');
+                                    $.ajax({
+                                        url: '/users/' + userid + '/email',
+                                        type: "GET",
+                                        contentType: "application/json; charset=utf-8",
+                                        dataType: "json",
+                                        success: (function (data) {
+                                            var status = data.status;
+                                            if (status) {
+                                                $("#watchmsg" + cmtwatch).css("display", "inline");
+                                                $("#email" + cmtwatch).hide();
+                                                $("#authmsg" + cmtwatch).hide();
+                                                $("#verify_email_btn" + cmtwatch).hide();
+                                            } else {
+                                                if (data.code === 109) {
+                                                    $("#watchmsg" + cmtwatch).hide();
+                                                    $("#email" + cmtwatch).css("display", "inline");
+                                                    $("#verify_email_btn" + cmtwatch).css("display", "inline");
+                                                    $("#email" + cmtwatch).prop("disabled", false);
+                                                    $("#email" + cmtwatch).focus();
+                                                } else if (data.code === 110) {
+                                                    alert('이메일 주소 인증이 완료되지 않았습니다. 이메일을 확인해 주세요.');
+                                                    $("#watchmsg" + cmtwatch).hide();
+                                                    $("#email" + cmtwatch).css("display", "inline");
+                                                    $("#verify_email_btn" + cmtwatch).css("display", "inline");
+                                                }
+                                                $("#verify_email_btn" + cmtwatch).prop("disabled", false);
+                                                $("#watchcheck" + cmtwatch).prop("checked", false);
+                                            }
+                                        }),
+                                        error: (function (xhr) {
+                                            console.log(xhr);
+                                        })
+                                    });
+                                }
+
+
+                            } 
+                        });
+
+                        $(document).on('click','#verify_email_btn' + $(this).data('cid'),function(event){
+                            event.preventDefault();
+                            $("#authmsg" + $(this).data('cid')).hide();
+                            var userid = document.getElementById('userid').value;
+                            var cid = $(this).data('cid');
+
+                            if ($("#email" + $(this).data('cid'))[0]) {
+                                $("#email" + $(this).data('cid')).prop('disabled', true);
+                                doUpdate = true;
+
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/users/' + userid + '/email',
+                                    data: ({ 'email': encodeURI($("#email" + $(this).data('cid'))[0].value) }),
+                                    success: function (data) {
+                                        if (data.status) {
+                                            if (data.email) {
+                                                alert('인증 메일이 발송되었습니다. 이메일을 확인해주세요.');
+                                                $("#watch_comment" + cid).prop("checked", false);
+                                                $("#authmsg" + cid).show();
+                                            }
+                                        } else {
+                                            if (data.code == 108){
+                                                alert('다른 이메일을 입력해주세요.');
+                                            } else {
+                                                alert('오류가 있는 것 같아요.');
+                                            }
+                                            $("#email" + cid).prop('disabled', false);
+                                        }
+                                    }
+                                });
+                            }
+
+                        });
+                        
+
+                        $(this).parent().on("submit", ".write_reply", function (event){
+                            event.preventDefault();
+                            submitReply(this);
+                        });
+                    }
+                });
+
+				$('.write_comment').on('submit',function(){
+					$('.comment_textarea').each(function(){   
+						var id = $(this).attr('id');
+						var value = $(this).val();
+						localStorage.setItem(id, value);
+					});   
+				});
+
+				var c = getUrlParameter("code");
+
+				if (c) {
+					$('.comment_textarea').each(function(){    
+						var id = $(this).attr('id');
+						var value = localStorage.getItem(id);
+
+						$(this).val(value);
+					}); 
+				} else {
+					$('.comment_textarea').each(function(){    
+						var id = $(this).attr('id');						
+						localStorage.removeItem(id);
+					});   
+				}
+            });
+
+            function child_toggle(id,count) {
+                var start_index;
+                $(".comment_row").each(function( index ) {
+                    if ($( this ).attr('id') == "cid" + id ) start_index = index;
+                    if ( start_index + count >= index ) {
+                        if ($( this ).attr('id') == "cid" + id ) {
+                            $(this).find('.comment').toggleClass('hide');
+                            $(this).find('.commentreply').toggleClass('hide');
+                            commentfold = $(this).find('.commentfold').html();
+                            if (commentfold.indexOf('[-]') !== -1 ) 
+                                $(this).find('.commentfold').html('[+'+(count+1)+']');
+                            else 
+                                $(this).find('.commentfold').html('[-]');
+                        } else {
+                            if ($(this).css("display") == "grid") {
+                                $(this).css("display","none");
+                            } else {
+                                $(this).css("display","grid");
+                            }
+                            $( this ).toggleClass('hide');
+                        }
+                    }
+                });
+            }
+
+            async function delete_item(id) {
+                if(window.confirm("삭제하시겠어요?")) {
+					try {
+						let response = await fetch('/api/topics/' + id, {
+							method: 'DELETE'
+						});
+
+						if(!response.ok) {
+							throw new Error("Network response was not ok");
+						}
+
+						let data = await response.json();
+
+						if (data.status) {
+							alert("삭제했습니다.");
+                            window.location.href = "/";
+						} else {
+                            if (data.code == 101) {
+                                window.location.href = "/login?code=101&return=/topics?id=" + id;
+                            } else {
+                                alert("삭제 실패했습니다.");
+                            }
+						}
+					} catch(error) {
+						console.error('Error:', error);
+					}
+                }
+            }
+            async function delete_comment(id, topic_id) {
+                if(window.confirm("삭제하시겠어요?")) {
+					try {
+						let response = await fetch('/comments/' + id, {
+							method: 'DELETE'
+						});
+
+						if(!response.ok) {
+							throw new Error("Network response was not ok");
+						}
+
+						let data = await response.json();
+
+						if (data.status) {
+							alert("삭제했습니다.");
+                            window.location.href = "/topic?id="+topic_id;
+						} else {
+                            if (data.code == 101) {
+                                window.location.href = "/login?code=101&return=/comment?id=" + id;
+                            } else {
+                                alert("삭제 실패했습니다.");
+                            }
+						}
+					} catch(error) {
+						console.error('Error:', error);
+					}
+                }
+            }
+            function scrollToComments(event) {
+                event.preventDefault();
+                const commentsSection = document.getElementById("comment_thread");
+
+                if (commentsSection) {
+                    history.pushState({ scrollY: window.scrollY }, "", window.location.href);
+                    commentsSection.scrollIntoView({ block: "start" });
+                }
+            }
+            window.onpopstate = function (event) {
+                if (event.state && event.state.scrollY !== undefined) {
+                    window.scrollTo({ top: event.state.scrollY });
+                }
+            };
+            window.onload = function () {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get("go") === "comments") {
+                    const commentsSection = document.getElementById("comment_thread");
+                    if (commentsSection) {
+                        setTimeout(() => {
+                            commentsSection.scrollIntoView({ block: "start" });
+                        }, 300);
+                        params.delete("go");
+                        const newUrl = window.location.pathname + "?" + params.toString();
+                        history.replaceState(null, null, newUrl); // URL 업데이트
+                    }
+                }
+            };
+        </script>
+        <script src="/vendor/jquery.shorten.min.js" type="text/javascript"></script>
+        <script src="/assets/watch.js?20210630a"></script>
+	</head>
+	<body>
+        <header>
+            <nav>
+                <div class=ltd><span class=geeknews><a href="/"  >GeekNews</a></span>
+                    <a href='/new' >최신글</a> <a href='/comments' >댓글</a> <a href='/past' >예전글</a> <a href='/ask' >Ask</a> <a href='/show' >Show</a> <a href='/plus' >GN⁺</a> <a href='/weekly' >Weekly</a>  | <a href='/write' >글등록</a>                     <span class=curnavitem>
+                    </span>
+                </div>
+                <div class=rtd>
+                    <form class="search-cse" action="search" method="GET">
+                        <input id="q" name="q" type="search" maxlength=20 class="input" placeholder="검색">
+                    </form>
+                    <a href='/login' >로그인</a>                </div>
+			</nav>
+        </header>		<main>			
+			<article>
+				<div class=topic-table>
+<div id='msg'></div><div class=topic><div class=vote><span id='vote26364'><a class=upvote href='javascript:vote(26364, "up");'><span>▲</span></a></span></div><div class='topictitle link'><a href='https://www.anthropic.com/research/AI-assistance-coding-skills' class='bold ud'><h1>AI 코딩 도구가 개발자 학습을 방해한다, Anthropic 연구 발견</h1></a> <span class=topicurl>(anthropic.com)</span></div><div class=topicinfo><span id='tp26364'>25</span>P by <a href='/user?id=davespark'>davespark</a> <span title='2026-02-03 14:31'>21시간전</span><span id='unvote26364'></span><span id='fav26364'> | <a href='javascript:fav(26364, "favorite")'>★ favorite</a></span> | <a href='topic?id=26364' onclick='scrollToComments(event)'>댓글 8개</a> </td></div><div class=topic_contents><div><span id='topic_contents'><p><strong>핵심 한 줄 요약</strong><br />
+AI 코딩 도구는 사용 방식에 따라 학습을 돕거나 망칠 수 있다. 개념 이해를 위한 적극적 질문이 핵심이며, 완전 위임은 속도도 학습도 모두 놓친다.</p>
+<p><strong>연구 개요</strong></p>
+<ul>
+<li>Anthropic 연구팀 진행</li>
+<li>대상: 52명 소프트웨어 엔지니어</li>
+<li>실험 설계: 새로운 Python 라이브러리(Trio) 학습 후 코딩 작업 수행</li>
+<li>AI 그룹: GPT-4o 기반 AI 코딩 도구 사용</li>
+<li>대조 그룹: 문서 + 웹 검색만 사용</li>
+<li>기간: 약 1시간 작업</li>
+</ul>
+<p><strong>주요 결과</strong></p>
+<ul>
+<li>AI 사용 그룹 → 퀴즈 점수 <strong>17% 낮음</strong>
+</li>
+<li>AI 사용해도 작업 속도 <strong>빨라지지 않음</strong>
+</li>
+<li>AI 미사용 그룹 → Trio 관련 에러 <strong>3배 이상</strong> 많이 경험 → 디버깅 능력 자연스럽게 향상</li>
+</ul>
+<p><strong>AI 사용 패턴에 따른 차이 (핵심 발견)</strong></p>
+<ul>
+<li>
+<strong>나쁜 패턴</strong> (퀴즈 40% 미만)
+<ul>
+<li>AI에 모든 작업 위임 (코드 통째 생성, 디버깅 전부 맡김)</li>
+<li>점차 의존도 증가</li>
+<li>가장 빠르게 끝냈으나 학습 효과 매우 낮음</li>
+</ul>
+</li>
+<li>
+<strong>좋은 패턴</strong> (퀴즈 65% 이상)
+<ul>
+<li>AI를 이해 돕는 도구로만 활용</li>
+<li>코드 생성 후 추가 질문 / 개념 설명 요청 / 이해 확인 질문</li>
+<li>두 번째로 빠른 속도 + 높은 학습 성과</li>
+</ul>
+</li>
+</ul>
+<p><strong>결론적 인사이트</strong></p>
+<ul>
+<li>AI 사용 자체가 문제 아님 → <strong>사용 방식</strong>이 학습 결정</li>
+<li>“고통스럽게 막히는 경험”이 숙련도 형성에 중요</li>
+<li>AI가 에러를 대신 처리 → 속도는 빠르나 “왜 에러가 났는지” 이해 부족</li>
+<li>단기 생산성 ↑ vs 장기 스킬 형성 ↓ 트레이드오프 존재</li>
+</ul>
+<p><strong>현장 개발자 의견 (참고)</strong></p>
+<ul>
+<li>긍정: 1년 작업을 2주 만에 완료, 10배 속도 향상 사례</li>
+<li>부정: 이미 이해한 코드에만 사용 권장, 주니어는 기술 부채 위험</li>
+<li>의견 분열: “코딩은 끝났다” vs “감독→창조 전환 불편”</li>
+</ul>
+<p><strong>제언</strong></p>
+<ul>
+<li>새로운 기술 학습 시: AI 완전 의존 피하고 일부러 “막히는 경험” 허용</li>
+<li>생산성 필요한 작업: AI 적극 활용 가능</li>
+<li>기업: 주니어 결과물 압박 + 동시에 AI 코드 검증/디버깅 스킬 쌓기 병행 필요</li>
+<li>미래 전망: AI 에이전트가 주요 업무 → 인간은 별도 시간 내어 코드/개념 공부</li>
+</ul>
+<p><strong>연구 한계</strong></p>
+<ul>
+<li>샘플 작음 (52명)</li>
+<li>짧은 작업 시간 (1시간)</li>
+<li>GPT-4o (2025년 기준 구형 모델) 사용</li>
+<li>퀴즈 점수가 장기 스킬 예측력 미지수</li>
+</ul>
+<p><a rel="nofollow" href="https://aisparkup.com/posts/8832">https://aisparkup.com/posts/8832</a></p>
+</span></div></div></div>            <div class=comment_form>
+                <form class="write_comment" action="/comments" method="POST" onsubmit="return replace2spaces('contents')">
+                    <div class="group">
+                                                                        <textarea id="contents" rows=5 style="width:100%" name="contents" class="comment_textarea" required placeholder="• 친절하고 점잖은 댓글을 남겨주세요&#10;• 주제와 관련된 내용으로 작성해주세요" ></textarea>
+                    </div>
+                    <div class="group comment_button_box watch_box">
+                                                <div></div>
+                                                <input type="submit" class="comment_button" value="댓글 달기" > 
+                        <div id="authmsg" class="inline watch" style="display: none; grid-column: 1 / 2;">인증 이메일 클릭후 다시 체크박스를 눌러주세요</div>
+                    </div>
+                    <input type="hidden" name="tid" value="26364">
+                    <input type="hidden" id="userid" value="">
+                </form>
+            </div>
+            </div>
+            <div id='comment_thread' class='comment_thread descendant'>
+<!-- comments -->
+<input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50578 style=--depth:0><div class=vote><span class=vote id='votec50578'><a class=upvote href='javascript:votec(50578, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=kimjoin2'>kimjoin2</a> <a href='comment?id=50578'>2시간전</a><span id='unvotec50578'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50578, 0);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50578' class='comment_contents'><p>알아야만 하는 지식 범위가 달라졌다라 생각합니다.<br />
+점점 알 필요없어지는 로우레벨이 넓어지내요.</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50578' data-watch='' data-watchable=''>답변달기</a></div></div><input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50544 style=--depth:0><div class=vote><span class=vote id='votec50544'><a class=upvote href='javascript:votec(50544, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=mammal'>mammal</a> <a href='comment?id=50544'>19시간전</a><span id='unvotec50544'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50544, 1);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50544' class='comment_contents'><p>답지 펴놓고 눈으로만 수학문제 공부하는거랑 같은거죠. 보는 순간에는 이해한거 같아도 책 닫으면 아무것도 안남는.</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50544' data-watch='' data-watchable=''>답변달기</a></div></div><input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50584 style=--depth:1><div class=vote><span class=vote id='votec50584'><a class=upvote href='javascript:votec(50584, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=onestone'>onestone</a> <a href='comment?id=50584'>1시간전</a><span id='unvotec50584'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50584, 0);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50584' class='comment_contents'><p>너무나 공감되는 말씀입니다</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50584' data-watch='' data-watchable=''>답변달기</a></div></div><input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50539 style=--depth:0><div class=vote><span class=vote id='votec50539'><a class=upvote href='javascript:votec(50539, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=hungryman'>hungryman</a> <a href='comment?id=50539'>20시간전</a><span id='unvotec50539'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50539, 0);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50539' class='comment_contents'><p>1년 작업이 2주가 됐는데 왜 10배인거지..</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50539' data-watch='' data-watchable=''>답변달기</a></div></div><input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50560 style=--depth:0><div class=vote><span class=vote id='votec50560'><a class=upvote href='javascript:votec(50560, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=treestae'>treestae</a> <a href='comment?id=50560'>14시간전</a><span id='unvotec50560'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50560, 0);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50560' class='comment_contents'><p>요즘 모델 쓰면 코드보는건 옵션이 되어가는 것 같아요.</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50560' data-watch='' data-watchable=''>답변달기</a></div></div><input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50536 style=--depth:0><div class=vote><span class=vote id='votec50536'><a class=upvote href='javascript:votec(50536, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=snisper'>snisper</a> <a href='comment?id=50536'>21시간전</a><span id='unvotec50536'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50536, 2);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50536' class='comment_contents'><p>학생이나 주니어는 AI쓰지 말아야하는 이유가 나왔군요.</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50536' data-watch='' data-watchable=''>답변달기</a></div></div><input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50552 style=--depth:1><div class=vote><span class=vote id='votec50552'><a class=upvote href='javascript:votec(50552, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=cshj55'>cshj55</a> <a href='comment?id=50552'>17시간전</a><span id='unvotec50552'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50552, 1);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50552' class='comment_contents'><p>안쓰면 취업이 안되잖아요?</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50552' data-watch='' data-watchable=''>답변달기</a></div></div><input type="hidden" id="userid" value=""><input type="hidden" id="verified" value="?>"><div class=comment_row id=cid50555 style=--depth:2><div class=vote><span class=vote id='votec50555'><a class=upvote href='javascript:votec(50555, "up");'><span>▲</span></a></span></div><div class=commentinfo><a href='/user?id=snisper'>snisper</a> <a href='comment?id=50555'>15시간전</a><span id='unvotec50555'></span>&nbsp;&nbsp;<a href='javascript:child_toggle(50555, 0);'><span class='commentfold'>[-]</span></a></div><div class=commentTD><span id='contents50555' class='comment_contents'><p>공부할때는 최소한만 쓰고, 취업할때는 적극적으로 활용하는 것이 AI라는 도구를 올바르게 사용하는 전략이 되지않을까요? 예전이나 지금이나 친구들끼리 어떤 주제에 대해서 비판적으로 토론하는 경우가 잘 없죠? 유투브보거나 블로그에서 찾을려고만 하는데, 뭔가를 배울려고할때는 내가 설명하는 것이 가장 빠른 방법인 경우가 많더라구요.</p>
+</span></div><div class=commentreply><a href='' class='cmtreply u' data-tid='26364' data-cid='50555' data-watch='' data-watchable=''>답변달기</a></div></div>  
+<!-- comments -->            
+            </div>
+            </article>            
+        </main>
+
+<script>
+document.addEventListener('keydown', function(event) {
+    if(event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+        var handled = false;
+        var replyForms = document.getElementsByClassName('write_reply');
+        if(replyForms.length > 0) {
+            var replyForm = replyForms[0];
+            var replyContents = document.getElementById('reply_contents');
+            if (replyContents && replyContents.value.trim() !== "") {
+                if(replace2spaces('reply_contents')) {
+                submitReply(replyForm);
+                handled = true;
+            }
+            }
+        }
+
+        if (!handled) {
+            var forms = document.getElementsByClassName('write_comment');
+            if (forms.length > 0) {
+                var form = forms[0];
+                var contents = document.getElementById('contents');
+                if (contents && contents.value.trim() !== "") {
+                    if(replace2spaces('contents')) {
+                        form.submit();
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+		<footer>
+			<div>
+				<a href='/guidelines' class=u>사이트 이용법</a>
+				<a href='/faq' class=u>FAQ</a>
+				<a href='/about' class=u>About & ToS</a>
+				<!-- <a href='release' class=u>Releases</a> -->
+				&nbsp; | 
+				 <a href='/blog' class=u>Blog</a>
+				 <a href='/lists' class=u>Lists</a>
+				 <a href='/podcast' class=u>Podcast</a>
+				 <a href='https://news.hada.io/rss/news' class=u>RSS</a>
+				&nbsp; | 
+				 <a href='/bookmarklet' class=u>Bookmarklet</a>
+				&nbsp; | 
+				 <a href='https://x.com/GeekNewsHada' class=u rel="me">X (Twitter)</a>
+				 <a href='https://facebook.com/GeekNewsHada' class=u>Facebook</a>
+				 &nbsp; | &nbsp; 긱뉴스봇 : 
+				 <a href='/slackbot' class='u keepall'>Slack</a>
+				 <a href='/jandibot' class='u keepall'>잔디</a>
+				 <a href='/discordbot' class='u keepall'>Discord</a>
+				 <a href='/teamsbot' class='u keepall'>Teams</a>
+				 <a href='/googlechatbot' class='u keepall'>Google Chat</a>
+				 <a href='/switbot' class='u keepall'>Swit</a>
+				
+            </div>
+			<div style="width: fit-content; display: inline-block;">
+				<form class="search-cse" action="search" method="GET">
+					<label for="q" class="label">검색</label>
+					<input id="q" name="q" type="text" maxlength=30 class="input" style="width: 200px">
+				</form>
+			</div>
+					</footer>	</body>
+</html>            
