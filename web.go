@@ -3,11 +3,22 @@ package main
 import (
 	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/mattn/go-runewidth"
+	"golang.org/x/term"
 	"jaytaylor.com/html2text"
 )
+
+// getTerminalWidth returns the current terminal width, or a default if unavailable
+func getTerminalWidth() int {
+	width, _, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil || width <= 0 {
+		return 120 // default fallback
+	}
+	return width
+}
 
 const geekNewsBaseURL = "https://news.hada.io/"
 
@@ -47,7 +58,9 @@ func fetchGeekNewsComments(topicID string) []string {
 	if err == nil && topicContent.Body != "" {
 		lines = append(lines, formatTopicContent(topicContent)...)
 		lines = append(lines, "")
-		lines = append(lines, "───────────────────────────────────────────────────────────")
+		// Create separator line matching half terminal width
+		separatorWidth := getTerminalWidth() / 2
+		lines = append(lines, strings.Repeat("─", separatorWidth))
 		lines = append(lines, "")
 	}
 
@@ -70,7 +83,7 @@ func fetchGeekNewsComments(topicID string) []string {
 // formatTopicContent formats the topic content (title, meta, body) for display
 func formatTopicContent(content *TopicContent) []string {
 	var lines []string
-	maxWidth := 60
+	maxWidth := getTerminalWidth() / 2
 
 	// Title
 	if content.Title != "" {
@@ -123,7 +136,7 @@ func formatTopicContent(content *TopicContent) []string {
 // formatComments formats a list of comments for display
 func formatComments(comments []Comment) []string {
 	var lines []string
-	maxWidth := 60
+	maxWidth := getTerminalWidth() / 2
 
 	for _, comment := range comments {
 		// Create indentation based on depth (limit visual depth to 4 for readability)

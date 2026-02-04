@@ -8,6 +8,7 @@ require (
 	github.com/gelembjuk/articletext v0.0.0-20231013143648-bc7a97ba132a
 	github.com/mattn/go-runewidth v0.0.15
 	github.com/rivo/tview v0.0.0-20240524063012-037df494fb76
+	golang.org/x/term v0.19.0
 	jaytaylor.com/html2text v0.0.0-20230321000545-74c2419ad056
 )
 
@@ -21,7 +22,6 @@ require (
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/term v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/neurosnap/sentences.v1 v1.0.7 // indirect
 )
