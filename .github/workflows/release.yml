@@ -31,4 +31,62 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+
+  chocolatey:
+    runs-on: windows-latest
+    needs: release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Download release asset
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.VERSION }}"
+          $url = "https://github.com/sappho192/gn-text/releases/download/v${version}/gn-text_${version}_windows_amd64.zip"
+          Invoke-WebRequest -Uri $url -OutFile "gn-text.zip"
+
+      - name: Calculate checksum
+        id: checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash -Path "gn-text.zip" -Algorithm SHA256).Hash.ToLower()
+          echo "CHECKSUM=$hash" >> $env:GITHUB_OUTPUT
+
+      - name: Prepare Chocolatey package
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.VERSION }}"
+          $checksum = "${{ steps.checksum.outputs.CHECKSUM }}"
+
+          # Update nuspec version
+          $nuspec = Get-Content "chocolatey/gn-text.nuspec" -Raw
+          $nuspec = $nuspec -replace '\$version\$', $version
+          Set-Content "chocolatey/gn-text.nuspec" $nuspec
+
+          # Update install script checksum
+          $install = Get-Content "chocolatey/tools/chocolateyinstall.ps1" -Raw
+          $install = $install -replace '\$checksum64\$', $checksum
+          Set-Content "chocolatey/tools/chocolateyinstall.ps1" $install
+
+      - name: Create Chocolatey package
+        shell: pwsh
+        run: |
+          cd chocolatey
+          choco pack
+
+      - name: Push to Chocolatey
+        shell: pwsh
+        env:
           CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+        run: |
+          $version = "${{ steps.version.outputs.VERSION }}"
+          cd chocolatey
+          choco push "gn-text.${version}.nupkg" --source https://push.chocolatey.org/ --api-key $env:CHOCOLATEY_API_KEY

@@ -16,10 +16,12 @@ builds:
       - -s -w -X main.version={{.Version}}
 
 archives:
-  - format: tar.gz
+  - formats:
+      - tar.gz
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
     name_template: >-
       {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
 
@@ -31,13 +33,3 @@ brews:
     homepage: https://github.com/sappho192/gn-text
     description: Terminal-based GeekNews reader for Korean tech news
     license: MIT
-
-chocolateys:
-  - name: gn-text
-    owners: sappho192
-    authors: sappho192
-    project_url: https://github.com/sappho192/gn-text
-    license_url: https://github.com/sappho192/gn-text/blob/main/LICENSE
-    description: Terminal-based GeekNews reader for Korean tech news
-    tags: "geeknews terminal tui korean news"
-    api_key: "{{ .Env.CHOCOLATEY_API_KEY }}"

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>gn-text</id>
+    <version>$version$</version>
+    <title>gn-text</title>
+    <authors>sappho192</authors>
+    <owners>sappho192</owners>
+    <projectUrl>https://github.com/sappho192/gn-text</projectUrl>
+    <licenseUrl>https://github.com/sappho192/gn-text/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Terminal-based GeekNews reader for Korean tech news</description>
+    <summary>A terminal UI application for reading GeekNews (news.hada.io)</summary>
+    <tags>geeknews terminal tui korean news cli</tags>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
