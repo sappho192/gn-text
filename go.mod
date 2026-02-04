@@ -1,4 +1,4 @@
-module github.com/piqoni/gn-text
+module github.com/sappho192/gn-text
 
 go 1.21.1
 
