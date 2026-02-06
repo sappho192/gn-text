@@ -24,6 +24,7 @@ brew install sappho192/tap/gn-text
 
 ```bash
 choco install gn-text
+choco install gn-text --version 0.1.3 # Use this until the package validation pass
 ```
 
 ### Manual Download
