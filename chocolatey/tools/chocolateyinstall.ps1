@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $packageName = 'gn-text'
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
-$url64 = "https://github.com/sappho192/gn-text/releases/download/v$env:chocolateyPackageVersion/gn-text_$env:chocolateyPackageVersion_windows_amd64.zip"
+$url64 = "https://github.com/sappho192/gn-text/releases/download/v$version$/gn-text_$version$_windows_amd64.zip"
 
 $packageArgs = @{
   packageName   = $packageName
