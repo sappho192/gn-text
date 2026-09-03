@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/mattn/go-runewidth"
 	"golang.org/x/term"
@@ -20,16 +22,31 @@ func getTerminalWidth() int {
 	return width
 }
 
-const geekNewsBaseURL = "https://news.hada.io/"
+const (
+	geekNewsBaseURL = "https://news.hada.io/"
+	maxResponseSize = 10 * 1024 * 1024 // 10 MB
+	requestTimeout  = 30 * time.Second
+)
+
+var httpClient = &http.Client{Timeout: requestTimeout}
 
 func fetchWebpage(url string) (string, error) {
-	res, err := http.Get(url)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return "", err
+	}
+
+	res, err := httpClient.Do(req)
 	if err != nil {
 		return "", err
 	}
 	defer res.Body.Close()
 
-	body, err := io.ReadAll(res.Body)
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		return "", fmt.Errorf("HTTP %d: %s", res.StatusCode, res.Status)
+	}
+
+	body, err := io.ReadAll(io.LimitReader(res.Body, maxResponseSize))
 	if err != nil {
 		return "", err
 	}
@@ -143,6 +160,13 @@ func formatComments(comments []Comment) []string {
 		visualDepth := min(comment.Depth, 4)
 		indent := strings.Repeat("   ", visualDepth*2) + "| "
 
+		// Very deeply nested comments are shown as an ellipsis
+		if comment.Depth > 10 {
+			lines = append(lines, indent+"[...]")
+			lines = append(lines, "  ")
+			continue
+		}
+
 		// Add author line with time
 		authorLine := indent + comment.Author
 		if comment.Time != "" {
@@ -170,11 +194,6 @@ func formatComments(comments []Comment) []string {
 			if len(lines) > 0 && lines[len(lines)-1] == indent {
 				lines = lines[:len(lines)-1]
 			}
-		}
-
-		// Add depth indicator for deeply nested comments
-		if comment.Depth > 10 {
-			lines = append(lines, indent+"[...]")
 		}
 
 		lines = append(lines, "  ")

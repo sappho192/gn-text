@@ -113,11 +113,7 @@ func parseGeekNewsComments(htmlContent string) ([]Comment, error) {
 			}
 		}
 
-		// Limit depth to 10 as per spec
-		if depth > 10 {
-			// Skip deeply nested comments, will show [...] indicator
-			return
-		}
+		// Depth is handled during formatting: comments deeper than 10 are shown as [...]
 
 		// Extract author
 		author := s.Find(".commentinfo a[href^='/user?id=']").First().Text()

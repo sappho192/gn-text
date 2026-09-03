@@ -42,7 +42,7 @@ gn-text
 |-----|--------|
 | `j` / `↓` | Move down |
 | `k` / `↑` | Move up |
-| `l` / `→` | View comments / article |
+| `l` / `→` / `Enter` | View comments / article |
 | `h` / `←` | Go back |
 | `Space` | Open article in browser |
 | `c` | Open comments in browser |
@@ -56,8 +56,8 @@ Article List → Comments → Article Content
      ←─────────────←──────────────←
 ```
 
-- Press `l` or `→` on the article list to view comments
-- Press `l` or `→` on comments to view the article content
+- Press `l`, `→`, or `Enter` on the article list to view comments
+- Press `l`, `→`, or `Enter` on comments to view the article content
 - Press `h` or `←` to go back
 
 ## Version
