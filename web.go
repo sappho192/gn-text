@@ -35,6 +35,7 @@ func fetchWebpage(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	req.Header.Set("User-Agent", "gn-text/"+version+" (+https://github.com/sappho192/gn-text)")
 
 	res, err := httpClient.Do(req)
 	if err != nil {

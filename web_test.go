@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 )
@@ -242,5 +244,31 @@ func TestFormatCommentsDeletedComment(t *testing.T) {
 	}
 	if !found {
 		t.Error("Expected deleted comment indicator '[삭제됨]'")
+	}
+}
+
+func TestFetchWebpageSetsUserAgent(t *testing.T) {
+	oldVersion := version
+	version = "v9.9.9"
+	defer func() { version = oldVersion }()
+
+	userAgentCh := make(chan string, 1)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userAgentCh <- r.UserAgent()
+		_, _ = w.Write([]byte("ok"))
+	}))
+	defer server.Close()
+
+	body, err := fetchWebpage(server.URL)
+	if err != nil {
+		t.Fatalf("fetchWebpage failed: %v", err)
+	}
+	if body != "ok" {
+		t.Errorf("Expected body %q, got %q", "ok", body)
+	}
+
+	expectedUserAgent := "gn-text/v9.9.9 (+https://github.com/sappho192/gn-text)"
+	if got := <-userAgentCh; got != expectedUserAgent {
+		t.Errorf("Expected User-Agent %q, got %q", expectedUserAgent, got)
 	}
 }
